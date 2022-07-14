@@ -6,20 +6,6 @@ const client = new Discord.Client({
   partials: ["MESSAGE"],
 });
 
-// const { GoogleAuth } = require("google-auth-library");
-// const { google } = require("googleapis");
-// const auth = new GoogleAuth({
-//   scopes: "https://www.googleapis.com/auth/spreadsheet",
-// });
-// const service = google.sheets({ version: "v4", auth });
-
-// service.spreadsheets.values
-//   .get({
-//     spreadsheetId: "1Bi7a5a_H5ELhnYv0kuQbNh_7xavyDDM_tuWJasOhbaU",
-//     range: "Points!A4:D11",
-//   })
-//   .then((res) => console.log(res));
-
 const Sheets = require("node-sheets").default;
 const gs = new Sheets(process.env.POINTS_SHEET_ID);
 gs.authorizeApiKey(process.env.GOOGLE_SHEET_KEY);
