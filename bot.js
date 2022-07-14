@@ -10,8 +10,6 @@ const Sheets = require("node-sheets").default;
 const gs = new Sheets(process.env.POINTS_SHEET_ID);
 gs.authorizeApiKey(process.env.GOOGLE_SHEET_KEY);
 
-const BOT_PREFIX = "$";
-
 client.on("ready", () => {
   console.log("Our bot is ready to go!!!");
 });
@@ -25,23 +23,33 @@ client.on("message", (msg) => {
     case "I love coding":
       msg.react("❤️");
       break;
-    case `${BOT_PREFIX}check-points`:
-      //   msg.member.roles.add("moderator");
-      gs.tables("Points!A2:C11").then((table) => {
-        // console.log(table.headers);
-        // console.log(table.formats);
-        const requesterName = "John Doe";
-        for (let memberData of table.rows) {
-          const memberName = `${memberData["First Name"].value} ${memberData["Last Name"].value}`;
-          if (memberName === requesterName) {
-            msg.reply(
-              `You have a total of ${memberData["Total Points"].value} points!`
-            );
-            return;
-          }
+  }
+
+  if (msg.content.trim().substring(0, 13) === "$check-points") {
+    const checkName = msg.content.substring(14).trim();
+    if (checkName.trim() == "") {
+      msg.reply(
+        "You must specify a first and last name after the command. \nEx: *$check-points Jack Penn*"
+      );
+      return;
+    }
+    console.log(checkName);
+
+    gs.tables("Points!A2:C100").then((table) => {
+      for (let memberData of table.rows) {
+        const memberName = `${memberData["First Name"].value} ${memberData["Last Name"].value}`;
+        if (memberName.toLocaleLowerCase() == checkName.toLocaleLowerCase()) {
+          msg.reply(
+            `${memberName} has a total of ${memberData["Total Points"].value} points!`
+          );
+          return;
         }
-        throw "No member found of name " + requesterName;
-      });
+      }
+      console.log("No member found of name " + checkName);
+      msg.reply(
+        `No member found with the name "${checkName}". Are you sure you typed it in correctly?`
+      );
+    });
   }
 });
 
