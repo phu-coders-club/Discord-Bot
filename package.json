@@ -11,7 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^13.8.1",
-    "dotenv": "^16.0.1"
+    "dotenv": "^16.0.1",
+    "googleapis": "^39.2.0",
+    "node-sheets": "^1.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
